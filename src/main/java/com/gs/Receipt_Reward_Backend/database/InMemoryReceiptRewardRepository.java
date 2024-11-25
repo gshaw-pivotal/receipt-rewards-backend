@@ -20,8 +20,12 @@ public class InMemoryReceiptRewardRepository implements ReceiptRewardRepository 
     }
 
     @Override
-    public void updateReceiptPoints(UUID receiptIid, int points) {
-
+    public void updateReceiptPoints(UUID receiptId, int points) {
+        if (receiptRecords.containsKey(receiptId)) {
+            receiptRecords.get(receiptId).setPoints(points);
+        } else {
+            throw new NotFoundException("No record found for receipt id " + receiptId);
+        }
     }
 
     @Override
@@ -34,6 +38,12 @@ public class InMemoryReceiptRewardRepository implements ReceiptRewardRepository 
     }
 
     private ReceiptEntity convertToReceiptEntity(Receipt receipt) {
-        return ReceiptEntity.builder().build();
+        return ReceiptEntity.builder()
+                .retailer(receipt.getRetailer())
+                .purchaseDate(receipt.getPurchaseDate())
+                .purchaseTime(receipt.getPurchaseTime())
+                .items(receipt.getItems())
+                .total(receipt.getTotal())
+                .build();
     }
 }
