@@ -29,6 +29,6 @@ The application has 2 endpoints:
 ## Assumptions
 
 - Points for characters in retailer name
-  - Assumes the English alphabet only, and thus a to z, Ato Z and 0 to 9 are the only eligible characters.
+  - Assumes the English alphabet only, and thus a to z, A to Z and 0 to 9 are the only eligible characters.
 - Points for time.
   - Given the statement `10 points if the time of purchase is after 2:00pm and before 4:00pm.` it is assumed that these are exclusive boundaries and therefore purchases at exactly 2:00pm (14:00) and 4:00pm (16:00) are not eligible for 10 points. 
