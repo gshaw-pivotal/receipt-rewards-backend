@@ -65,9 +65,11 @@ public class RewardPointsCalculator {
 
     private int calculateMultipleOf25Points(String total) {
         //25 points if total is multiple of 0.25
-        if (total != null && Float.parseFloat(total) % 0.25 == 0) {
-            return 25;
-        }
+        try {
+            if (total != null && Float.parseFloat(total) % 0.25 == 0) {
+                return 25;
+            }
+        } catch (NumberFormatException e) {}
 
         return 0;
     }
@@ -88,8 +90,10 @@ public class RewardPointsCalculator {
             int points = 0;
             for (ReceiptItem item : items) {
                 if (item.getShortDescription().trim().length() % 3 == 0) {
-                    float price = Float.parseFloat(item.getPrice());
-                    points = points + (int) Math.ceil(price * 0.2);
+                    try {
+                        float price = Float.parseFloat(item.getPrice());
+                        points = points + (int) Math.ceil(price * 0.2);
+                    } catch (NumberFormatException e) {}
                 }
             }
 
@@ -101,9 +105,11 @@ public class RewardPointsCalculator {
 
     private int calculateOddDayPoints(String purchaseDate) {
         //6 points if day is odd
-        if (purchaseDate != null && Integer.parseInt(purchaseDate.split("-")[2]) % 2 == 1) {
-            return 6;
-        }
+        try {
+            if (purchaseDate != null && Integer.parseInt(purchaseDate.split("-")[2]) % 2 == 1) {
+                return 6;
+            }
+        } catch (NumberFormatException e) {}
 
         return 0;
     }
