@@ -39,20 +39,24 @@ public class RewardPointsCalculator {
 
     private int calculateRetailerNamePoint(String retailerName) {
         //1 point per alphanumeric character in retailer name
-        Pattern retailerCharsForPoints = Pattern.compile("[a-zA-Z0-9]");
-        Matcher matchingChars = retailerCharsForPoints.matcher(retailerName);
+        if (retailerName != null) {
+            Pattern retailerCharsForPoints = Pattern.compile("[a-zA-Z0-9]");
+            Matcher matchingChars = retailerCharsForPoints.matcher(retailerName);
 
-        int matchingCount = 0;
-        while (matchingChars.find()) {
-            matchingCount++;
+            int matchingCount = 0;
+            while (matchingChars.find()) {
+                matchingCount++;
+            }
+
+            return matchingCount;
         }
 
-        return matchingCount;
+        return 0;
     }
 
     private int calculateRoundDollarPoints(String total) {
         //50 points if total is round dollar amount
-        if (total.endsWith(".00")) {
+        if (total != null && total.endsWith(".00")) {
             return 50;
         }
 
@@ -61,7 +65,7 @@ public class RewardPointsCalculator {
 
     private int calculateMultipleOf25Points(String total) {
         //25 points if total is multiple of 0.25
-        if (Float.parseFloat(total) % 0.25 == 0) {
+        if (total != null && Float.parseFloat(total) % 0.25 == 0) {
             return 25;
         }
 
@@ -70,26 +74,34 @@ public class RewardPointsCalculator {
 
     private int calculateItemListPoints(List<ReceiptItem> items) {
         //5 points for every 2 items
-        return (items.size() / 2) * 5;
+        if (items != null) {
+            return (items.size() / 2) * 5;
+        }
+
+        return 0;
     }
 
     private int calculateItemDescriptionPoints(List<ReceiptItem> items) {
         //Points for each item whose trimmed description is a multiple of 3,
         //where the points are calculated as the price multiplied by 0.2 rounded up
-        int points = 0;
-        for (ReceiptItem item : items) {
-            if (item.getShortDescription().trim().length() % 3 == 0) {
-                float price = Float.parseFloat(item.getPrice());
-                points = points + (int) Math.ceil(price * 0.2);
+        if (items != null) {
+            int points = 0;
+            for (ReceiptItem item : items) {
+                if (item.getShortDescription().trim().length() % 3 == 0) {
+                    float price = Float.parseFloat(item.getPrice());
+                    points = points + (int) Math.ceil(price * 0.2);
+                }
             }
+
+            return points;
         }
 
-        return points;
+        return 0;
     }
 
     private int calculateOddDayPoints(String purchaseDate) {
         //6 points if day is odd
-        if (Integer.parseInt(purchaseDate.split("-")[2]) % 2 == 1) {
+        if (purchaseDate != null && Integer.parseInt(purchaseDate.split("-")[2]) % 2 == 1) {
             return 6;
         }
 
@@ -98,8 +110,8 @@ public class RewardPointsCalculator {
 
     private int calculateTimeOfPurchasePoints(String purchaseTime) {
         //10 points for purchase after 2:00pm (14:00) and before 4:00pm (16:00)
-        if (purchaseTime.startsWith("15:") ||
-                (purchaseTime.startsWith("14:") && (!purchaseTime.endsWith(":00")))) {
+        if (purchaseTime != null && (purchaseTime.startsWith("15:") ||
+                (purchaseTime.startsWith("14:") && (!purchaseTime.endsWith(":00"))))) {
             return 10;
         }
 
