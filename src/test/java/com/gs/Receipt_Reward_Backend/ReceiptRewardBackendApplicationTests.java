@@ -1,9 +1,7 @@
 package com.gs.Receipt_Reward_Backend;
 
 import com.gs.Receipt_Reward_Backend.model.Receipt;
-import com.gs.Receipt_Reward_Backend.model.ReceiptIdResponse;
 import com.gs.Receipt_Reward_Backend.model.ReceiptItem;
-import com.gs.Receipt_Reward_Backend.model.ReceiptPointsResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
