@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 
 public class RewardPointsCalculator {
 
+    String retailerNameCharsRegexPattern = "[a-zA-Z0-9]";
+
     public int calculateRewardPoints(Receipt receipt) {
         int totalPoints = 0;
 
@@ -40,7 +42,7 @@ public class RewardPointsCalculator {
     private int calculateRetailerNamePoint(String retailerName) {
         //1 point per alphanumeric character in retailer name
         if (retailerName != null) {
-            Pattern retailerCharsForPoints = Pattern.compile("[a-zA-Z0-9]");
+            Pattern retailerCharsForPoints = Pattern.compile(retailerNameCharsRegexPattern);
             Matcher matchingChars = retailerCharsForPoints.matcher(retailerName);
 
             int matchingCount = 0;
@@ -69,7 +71,7 @@ public class RewardPointsCalculator {
             if (total != null && Float.parseFloat(total) % 0.25 == 0) {
                 return 25;
             }
-        } catch (NumberFormatException e) {}
+        } catch (NumberFormatException ignored) {}
 
         return 0;
     }
@@ -93,7 +95,7 @@ public class RewardPointsCalculator {
                     try {
                         float price = Float.parseFloat(item.getPrice());
                         points = points + (int) Math.ceil(price * 0.2);
-                    } catch (NumberFormatException e) {}
+                    } catch (NumberFormatException ignored) {}
                 }
             }
 
@@ -109,7 +111,7 @@ public class RewardPointsCalculator {
             if (purchaseDate != null && Integer.parseInt(purchaseDate.split("-")[2]) % 2 == 1) {
                 return 6;
             }
-        } catch (NumberFormatException e) {}
+        } catch (NumberFormatException ignored) {}
 
         return 0;
     }
