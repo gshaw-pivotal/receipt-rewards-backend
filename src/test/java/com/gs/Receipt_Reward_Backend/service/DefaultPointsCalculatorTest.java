@@ -143,4 +143,47 @@ class DefaultPointsCalculatorTest {
                 .build());
         assertEquals(3, points);
     }
+
+    @Test
+    void dayPoints() {
+        int points;
+
+        points = calculator.calculateRewardPoints(Receipt.builder().purchaseDate(null).build());
+        assertEquals(0, points);
+
+        points = calculator.calculateRewardPoints(Receipt.builder().purchaseDate("").build());
+        assertEquals(0, points);
+
+        points = calculator.calculateRewardPoints(Receipt.builder().purchaseDate("2024-12-01").build());
+        assertEquals(6, points);
+
+        points = calculator.calculateRewardPoints(Receipt.builder().purchaseDate("2024-12-02").build());
+        assertEquals(0, points);
+    }
+
+    @Test
+    void timePoints() {
+        int points;
+
+        points = calculator.calculateRewardPoints(Receipt.builder().purchaseTime(null).build());
+        assertEquals(0, points);
+
+        points = calculator.calculateRewardPoints(Receipt.builder().purchaseTime("").build());
+        assertEquals(0, points);
+
+        points = calculator.calculateRewardPoints(Receipt.builder().purchaseTime("14:00").build());
+        assertEquals(0, points);
+
+        points = calculator.calculateRewardPoints(Receipt.builder().purchaseTime("16:00").build());
+        assertEquals(0, points);
+
+        points = calculator.calculateRewardPoints(Receipt.builder().purchaseTime("14:01").build());
+        assertEquals(10, points);
+
+        points = calculator.calculateRewardPoints(Receipt.builder().purchaseTime("15:59").build());
+        assertEquals(10, points);
+
+        points = calculator.calculateRewardPoints(Receipt.builder().purchaseTime("15:00").build());
+        assertEquals(10, points);
+    }
 }

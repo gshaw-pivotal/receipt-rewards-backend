@@ -108,7 +108,7 @@ public class DefaultPointsCalculator implements RewardPointsCalculator{
     private int calculateOddDayPoints(String purchaseDate) {
         //6 points if day is odd
         try {
-            if (purchaseDate != null && Integer.parseInt(purchaseDate.split("-")[2]) % 2 == 1) {
+            if (purchaseDate != null && !purchaseDate.isEmpty() && Integer.parseInt(purchaseDate.split("-")[2]) % 2 == 1) {
                 return 6;
             }
         } catch (NumberFormatException ignored) {}
