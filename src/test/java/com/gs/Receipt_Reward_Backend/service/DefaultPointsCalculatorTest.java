@@ -1,7 +1,11 @@
 package com.gs.Receipt_Reward_Backend.service;
 
 import com.gs.Receipt_Reward_Backend.model.Receipt;
+import com.gs.Receipt_Reward_Backend.model.ReceiptItem;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -69,5 +73,74 @@ class DefaultPointsCalculatorTest {
 
         points = calculator.calculateRewardPoints(Receipt.builder().total("1.75").build());
         assertEquals(25, points);
+    }
+
+    @Test
+    void totalItemCountPoints() {
+        int points;
+
+        points = calculator.calculateRewardPoints(Receipt.builder().items(null).build());
+        assertEquals(0, points);
+
+        points = calculator.calculateRewardPoints(Receipt.builder().items(Collections.emptyList()).build());
+        assertEquals(0, points);
+
+        points = calculator.calculateRewardPoints(Receipt.builder()
+                .items(List.of(ReceiptItem.builder().shortDescription("A").build()))
+                .build());
+        assertEquals(0, points);
+
+        points = calculator.calculateRewardPoints(Receipt.builder()
+                .items(List.of(
+                        ReceiptItem.builder().shortDescription("A").build(),
+                        ReceiptItem.builder().shortDescription("B").build())
+                )
+                .build());
+        assertEquals(5, points);
+
+        points = calculator.calculateRewardPoints(Receipt.builder()
+                .items(List.of(
+                        ReceiptItem.builder().shortDescription("A").build(),
+                        ReceiptItem.builder().shortDescription("B").build(),
+                        ReceiptItem.builder().shortDescription("C").build(),
+                        ReceiptItem.builder().shortDescription("D").build())
+                )
+                .build());
+        assertEquals(10, points);
+    }
+
+    @Test
+    void itemDescriptionPoints() {
+        int points;
+
+        points = calculator.calculateRewardPoints(Receipt.builder()
+                .items(List.of(ReceiptItem.builder().shortDescription("A").price("1.23").build()))
+                .build());
+        assertEquals(0, points);
+
+        points = calculator.calculateRewardPoints(Receipt.builder()
+                .items(List.of(ReceiptItem.builder().shortDescription("ABCD").price("4.56").build()))
+                .build());
+        assertEquals(0, points);
+
+        points = calculator.calculateRewardPoints(Receipt.builder()
+                .items(List.of(ReceiptItem.builder().shortDescription("ABC").price("1.00").build()))
+                .build());
+        assertEquals(1, points);
+
+        points = calculator.calculateRewardPoints(Receipt.builder()
+                .items(List.of(ReceiptItem.builder().shortDescription("ABC").price("2.00").build()))
+                .build());
+        assertEquals(1, points);
+
+        points = calculator.calculateRewardPoints(Receipt.builder()
+                .items(List.of(ReceiptItem.builder().shortDescription("ABC").price("10.00").build()))
+                .build());
+        assertEquals(2, points);
+
+        points = calculator.calculateRewardPoints(Receipt.builder()
+                .items(List.of(ReceiptItem.builder().shortDescription("ABC").price("12.23").build()))
+                .build());
+        assertEquals(3, points);
     }
 }
